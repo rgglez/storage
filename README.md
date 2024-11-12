@@ -7,14 +7,12 @@
 [![Go Report Card](https://goreportcard.com/badge/github.com/rgglez/storage)](https://goreportcard.com/report/github.com/rgglez/storage)
 [![GitHub release](https://img.shields.io/github/release/rgglez/storage.svg)](https://github.com/rgglez/storage/releases/)
 
-Example of [go-storage](https://github.com/rgglez/go-storage) usage.
-
-This Go module exemplifies the usage of the go-storage library, which makes
-transparent the storage and retrieval of files to and from a number of both 
+This Go module encapsulates the [go-storage](https://github.com/rgglez/go-storage) library, 
+which makes transparent the storage and retrieval of files to and from a number of both 
 cloud services and local supports. A full list of supported backends can be
 found in the go-storage [README](https://github.com/rgglez/go-storage/blob/master/README.md).
 
-It provides 2 functions, one for writing and one for reading.
+It provides 2 functions, one for writing and one for reading. It takes care of the boilerplate.
 
 You need to provide the constructor ***NewStorage(cnn string)*** a connection string in the
 go-storage format:
@@ -25,5 +23,6 @@ cnn := "oss://bucket?credential=env&endpoint=http://127.0.0.1:9090&name=bucket"
 
 ## License
 
-Apache 2.0
-Please read the LICENSE file.
+Apache-2.0. Please read the [LICENSE](LICENSE) file.
+
+Copyright (c) 2024 Rodolfo González González.
