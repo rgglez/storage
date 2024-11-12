@@ -18,7 +18,7 @@ You need to provide the constructor ***NewStorage(cnn string)*** a connection st
 go-storage format:
 
 ```go
-cnn := "oss://bucket?credential=env&endpoint=http://127.0.0.1:9090&name=bucket"
+cnn := "oss://bucket/?credential=env&endpoint=http://127.0.0.1:9090&name=bucket"
 ```
 
 ## License
