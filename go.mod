@@ -1,6 +1,8 @@
 module github.com/rgglez/storage
 
-go 1.21.3
+go 1.22
+
+toolchain go1.23.2
 
 require (
 	github.com/kr/pretty v0.3.1
@@ -10,10 +12,10 @@ require (
 )
 
 require (
-	github.com/aliyun/aliyun-oss-go-sdk v3.0.1+incompatible // indirect
+	github.com/aliyun/aliyun-oss-go-sdk v3.0.2+incompatible // indirect
 	github.com/kr/text v0.2.0 // indirect
 	github.com/rgglez/go-storage/credential v1.0.0 // indirect
 	github.com/rgglez/go-storage/endpoint v1.2.1 // indirect
-	github.com/rogpeppe/go-internal v1.9.0 // indirect
-	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
+	github.com/rogpeppe/go-internal v1.13.1 // indirect
+	golang.org/x/time v0.8.0 // indirect
 )
