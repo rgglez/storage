@@ -183,7 +183,7 @@ func (s *Storage) ReadWithSignedURL(path string, expire time.Duration) (req *htt
 
 //-----------------------------------------------------------------------------
 
-func (s *Storage) WriteWithSignedURL(path string, expire time.Duration) error {
+func (s *Storage) WriteWithSignedURL(path string, expire time.Duration, size int64)  (req *http.Request, err error) {
 	defer func() { //catch or finally
 		if err := recover(); err != nil { //catch
 			fmt.Println("===============================================================")
@@ -194,9 +194,6 @@ func (s *Storage) WriteWithSignedURL(path string, expire time.Duration) error {
 			os.Exit(1)
 		}
 	}()
-
-	size := rand.Int63n(4 * 1024 * 1024)
-	r := io.LimitReader(randbytes.NewRand(), size)
 
 	// QuerySignHTTPWrite needs at least three arguments.
 	// `path` is the path of object.
@@ -211,19 +208,10 @@ func (s *Storage) WriteWithSignedURL(path string, expire time.Duration) error {
 	// `req.ContentLength` records the length of the associated content, the value equals to `size`.
 	//
 	// `err` is the error during this operation.
-	req, err := s.store.QuerySignHTTPWrite(path, size, expire)
+	req, err = s.store.QuerySignHTTPWrite(path, size, expire)
 	if err != nil {
-		return fmt.Errorf("write %v: %v", path, err)
+		return nil, fmt.Errorf("write %v: %v", path, err)
 	}
 
-	// Set request body.
-	req.Body = io.NopCloser(r)
-
-	client := http.Client{}
-	_, err = client.Do(req)
-	if err != nil {
-		return fmt.Errorf("send HTTP request for writing %v: %v", path, err)
-	}
-
-	return nil
+	return req, nil
 }
