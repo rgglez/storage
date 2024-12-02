@@ -24,14 +24,11 @@ import (
 	"regexp"
 	"strings"
 	"time"
-	"math/rand"
-	"io"
 
 	"github.com/kr/pretty"
 	_ "github.com/rgglez/go-storage/services/oss/v3"
 	services "github.com/rgglez/go-storage/v5/services"
 	"github.com/rgglez/go-storage/v5/types"
-	"github.com/rgglez/go-storage/v5/pkg/randbytes"
 	tracerr "github.com/ztrue/tracerr"
 )
 
