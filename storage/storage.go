@@ -19,14 +19,19 @@ package storage
 import (
 	"context"
 	"fmt"
+	"net/http"
 	"os"
 	"regexp"
 	"strings"
+	"time"
+	"math/rand"
+	"io"
 
 	"github.com/kr/pretty"
 	_ "github.com/rgglez/go-storage/services/oss/v3"
 	services "github.com/rgglez/go-storage/v5/services"
 	"github.com/rgglez/go-storage/v5/types"
+	"github.com/rgglez/go-storage/v5/pkg/randbytes"
 	tracerr "github.com/ztrue/tracerr"
 )
 
@@ -144,5 +149,81 @@ func (s *Storage) Write(filePath string, objectName string) (err error) {
 	}
 
 	fmt.Printf("Successfully uploaded %s to %s\n", filePath, objectName)
+	return nil
+}
+
+//-----------------------------------------------------------------------------
+
+func (s *Storage) ReadWithSignedURL(path string, expire time.Duration) (req *http.Request, err error) {
+	defer func() { //catch or finally
+		if err := recover(); err != nil { //catch
+			fmt.Println("===============================================================")
+			pretty.Println(err)
+			fmt.Println("===============================================================")
+			fmt.Fprintf(os.Stderr, "Exception: %v\n", err)
+			fmt.Println("===============================================================")
+			os.Exit(1)
+		}
+	}()
+
+	// QuerySignHTTPRead needs at least two arguments.
+	// `path` is the path of object.
+	// `expire` provides the time period, with type time.Duration, for which the generated req.URL is valid.
+	//
+	// QuerySignHTTPRead will return two values.
+	// `req` is the generated `*http.Request`, `req.URL` specifies the URL to access with signature in the query string. And `req.Header` specifies the HTTP headers included in the signature.
+	// `err` is the error during this operation.
+	req, err = s.store.QuerySignHTTPRead(path, expire)
+	if err != nil {
+		return nil, fmt.Errorf("read %v: %v", path, err)
+	}	
+
+	return req, nil
+}
+
+//-----------------------------------------------------------------------------
+
+func (s *Storage) WriteWithSignedURL(path string, expire time.Duration) error {
+	defer func() { //catch or finally
+		if err := recover(); err != nil { //catch
+			fmt.Println("===============================================================")
+			pretty.Println(err)
+			fmt.Println("===============================================================")
+			fmt.Fprintf(os.Stderr, "Exception: %v\n", err)
+			fmt.Println("===============================================================")
+			os.Exit(1)
+		}
+	}()
+
+	size := rand.Int63n(4 * 1024 * 1024)
+	r := io.LimitReader(randbytes.NewRand(), size)
+
+	// QuerySignHTTPWrite needs at least three arguments.
+	// `path` is the path of object.
+	// `size` is the length, in bytes, of the data for uploading.
+	// `expire` provides the time period, with type time.Duration, for which the generated req.URL is valid.
+	//
+	// QuerySignHTTPWrite will return two values.
+	//
+	// `req` is the generated `*http.Request`:
+	// `req.URL` specifies the URL to access with signature in the query string.
+	// `req.Header` specifies the HTTP headers included in the signature.
+	// `req.ContentLength` records the length of the associated content, the value equals to `size`.
+	//
+	// `err` is the error during this operation.
+	req, err := s.store.QuerySignHTTPWrite(path, size, expire)
+	if err != nil {
+		return fmt.Errorf("write %v: %v", path, err)
+	}
+
+	// Set request body.
+	req.Body = io.NopCloser(r)
+
+	client := http.Client{}
+	_, err = client.Do(req)
+	if err != nil {
+		return fmt.Errorf("send HTTP request for writing %v: %v", path, err)
+	}
+
 	return nil
 }
