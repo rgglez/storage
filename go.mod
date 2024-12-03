@@ -6,7 +6,7 @@ toolchain go1.23.2
 
 require (
 	github.com/kr/pretty v0.3.1
-	github.com/rgglez/go-storage/services/oss/v3 v3.0.1
+	github.com/rgglez/go-storage/services/oss/v3 v3.0.3
 	github.com/rgglez/go-storage/v5 v5.0.0
 	github.com/ztrue/tracerr v0.4.0
 )
