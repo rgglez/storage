@@ -19,3 +19,8 @@ require (
 	github.com/rogpeppe/go-internal v1.13.1 // indirect
 	golang.org/x/time v0.8.0 // indirect
 )
+
+//replace (
+//	github.com/rgglez/go-storage/services/oss/v3 => ../../Portafolios/go-storage/services/oss/v3
+//	github.com/rgglez/go-storage/v5 => ../../Portafolios/go-storage/v5
+//)

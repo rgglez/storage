@@ -19,6 +19,7 @@ package storage
 import (
 	"context"
 	"fmt"
+	"net/url"
 	"os"
 	"regexp"
 	"strings"
@@ -27,7 +28,7 @@ import (
 	"github.com/kr/pretty"
 	_ "github.com/rgglez/go-storage/services/oss/v3"
 	services "github.com/rgglez/go-storage/v5/services"
-	"github.com/rgglez/go-storage/v5/types"
+	types "github.com/rgglez/go-storage/v5/types"
 	tracerr "github.com/ztrue/tracerr"
 )
 
@@ -150,7 +151,7 @@ func (s *Storage) Write(filePath string, objectName string) (err error) {
 
 //-----------------------------------------------------------------------------
 
-func (s *Storage) ReadWithSignedURL(path string, expire time.Duration) (url string, err error) {
+func (s *Storage) ReadWithSignedURL(path string, expire time.Duration) (url *url.URL, err error) {
 	defer func() { //catch or finally
 		if err := recover(); err != nil { //catch
 			fmt.Println("===============================================================")
@@ -169,17 +170,17 @@ func (s *Storage) ReadWithSignedURL(path string, expire time.Duration) (url stri
 	// QuerySignHTTPRead will return two values.
 	// `req` is the generated `*http.Request`, `req.URL` specifies the URL to access with signature in the query string. And `req.Header` specifies the HTTP headers included in the signature.
 	// `err` is the error during this operation.
-	url, err = s.store.QuerySignHTTPRead(path, expire)
+	req, err := s.store.QuerySignHTTPRead(path, expire)
 	if err != nil {
-		return "", fmt.Errorf("read %v: %v", path, err)
+		return nil, fmt.Errorf("read %v: %v", path, err)
 	}
 
-	return url, nil
+	return req.URL, nil
 }
 
 //-----------------------------------------------------------------------------
 
-func (s *Storage) WriteWithSignedURL(path string, expire time.Duration, size int64) (url string, err error) {
+func (s *Storage) WriteWithSignedURL(path string, expire time.Duration, size int64) (url *url.URL, err error) {
 	defer func() { //catch or finally
 		if err := recover(); err != nil { //catch
 			fmt.Println("===============================================================")
@@ -204,10 +205,10 @@ func (s *Storage) WriteWithSignedURL(path string, expire time.Duration, size int
 	// `req.ContentLength` records the length of the associated content, the value equals to `size`.
 	//
 	// `err` is the error during this operation.
-	url, err = s.store.QuerySignHTTPWrite(path, size, expire)
+	req, err := s.store.QuerySignHTTPWrite(path, size, expire)
 	if err != nil {
-		return "", fmt.Errorf("write %v: %v", path, err)
+		return nil, fmt.Errorf("write %v: %v", path, err)
 	}
 
-	return url, nil
+	return req.URL, nil
 }
