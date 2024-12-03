@@ -218,8 +218,6 @@ github.com/rgglez/go-storage/credential v1.0.0 h1:530l8DkSADzswL2CEQlWOKTOyr7e7D
 github.com/rgglez/go-storage/credential v1.0.0/go.mod h1:InEsawSvBDJ1JZXMbRNcugpwd3YxxLwO2RZQ7WUERz0=
 github.com/rgglez/go-storage/endpoint v1.2.1 h1:ZY/aP7oWQ9qdN1OtMt5bITg+M3hh4ajXVc9Sc63r9gE=
 github.com/rgglez/go-storage/endpoint v1.2.1/go.mod h1:M0Dl0paih0+a7IWgkakeVtzqF9kmsge7A2jo9fTpZo8=
-github.com/rgglez/go-storage/services/oss/v3 v3.0.0 h1:o0q1Zm1ZEAvPk58RY2m0Ezjg0Lvt+CYEHCSKBkK7LX8=
-github.com/rgglez/go-storage/services/oss/v3 v3.0.0/go.mod h1:+/CODSNXRAq1utD3ydVNgjDlIq+KcJ8Sv7iftAMFbEU=
 github.com/rgglez/go-storage/services/oss/v3 v3.0.1 h1:RELyyFcxPSnKpUo88Hvu3ipndiOwqjaCYgST59UpodI=
 github.com/rgglez/go-storage/services/oss/v3 v3.0.1/go.mod h1:+/CODSNXRAq1utD3ydVNgjDlIq+KcJ8Sv7iftAMFbEU=
 github.com/rgglez/go-storage/v5 v5.0.0 h1:gOWDQvilKpHwi2gZXp/ZzyBusqaPW12YUZK36qGcij8=
