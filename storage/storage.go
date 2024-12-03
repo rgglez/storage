@@ -19,7 +19,6 @@ package storage
 import (
 	"context"
 	"fmt"
-	"net/http"
 	"os"
 	"regexp"
 	"strings"
@@ -151,7 +150,7 @@ func (s *Storage) Write(filePath string, objectName string) (err error) {
 
 //-----------------------------------------------------------------------------
 
-func (s *Storage) ReadWithSignedURL(path string, expire time.Duration) (req *http.Request, err error) {
+func (s *Storage) ReadWithSignedURL(path string, expire time.Duration) (url string, err error) {
 	defer func() { //catch or finally
 		if err := recover(); err != nil { //catch
 			fmt.Println("===============================================================")
@@ -170,17 +169,17 @@ func (s *Storage) ReadWithSignedURL(path string, expire time.Duration) (req *htt
 	// QuerySignHTTPRead will return two values.
 	// `req` is the generated `*http.Request`, `req.URL` specifies the URL to access with signature in the query string. And `req.Header` specifies the HTTP headers included in the signature.
 	// `err` is the error during this operation.
-	req, err = s.store.QuerySignHTTPRead(path, expire)
+	url, err = s.store.QuerySignHTTPRead(path, expire)
 	if err != nil {
-		return nil, fmt.Errorf("read %v: %v", path, err)
-	}	
+		return "", fmt.Errorf("read %v: %v", path, err)
+	}
 
-	return req, nil
+	return url, nil
 }
 
 //-----------------------------------------------------------------------------
 
-func (s *Storage) WriteWithSignedURL(path string, expire time.Duration, size int64)  (req *http.Request, err error) {
+func (s *Storage) WriteWithSignedURL(path string, expire time.Duration, size int64) (url string, err error) {
 	defer func() { //catch or finally
 		if err := recover(); err != nil { //catch
 			fmt.Println("===============================================================")
@@ -205,10 +204,10 @@ func (s *Storage) WriteWithSignedURL(path string, expire time.Duration, size int
 	// `req.ContentLength` records the length of the associated content, the value equals to `size`.
 	//
 	// `err` is the error during this operation.
-	req, err = s.store.QuerySignHTTPWrite(path, size, expire)
+	url, err = s.store.QuerySignHTTPWrite(path, size, expire)
 	if err != nil {
-		return nil, fmt.Errorf("write %v: %v", path, err)
+		return "", fmt.Errorf("write %v: %v", path, err)
 	}
 
-	return req, nil
+	return url, nil
 }
