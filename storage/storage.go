@@ -83,6 +83,25 @@ func NewStorage(cnn string) *Storage {
 
 //-----------------------------------------------------------------------------
 
+func (s *Storage) Delete(path string, pairs ...types.Pair) (err error) {
+	defer func() { //catch or finally
+		if err := recover(); err != nil { //catch
+			fmt.Println("===============================================================")
+			pretty.Println(err)
+			fmt.Println("===============================================================")
+			fmt.Fprintf(os.Stderr, "Exception: %v\n", err)
+			fmt.Println("===============================================================")
+			os.Exit(1)
+		}
+	}()
+
+	ctx := context.Background()
+
+	return s.store.DeleteWithContext(ctx, path, pairs...)
+}
+
+//-----------------------------------------------------------------------------
+
 func (s *Storage) Read(objectName string, filePath string) (err error) {
 	defer func() { //catch or finally
 		if err := recover(); err != nil { //catch
@@ -151,7 +170,7 @@ func (s *Storage) Write(filePath string, objectName string) (err error) {
 
 //-----------------------------------------------------------------------------
 
-func (s *Storage) ReadWithSignedURL(path string, expire time.Duration) (url *url.URL, err error) {
+func (s *Storage) ReadWithSignedURL(path string, expire time.Duration, pairs ...types.Pair) (url *url.URL, err error) {
 	defer func() { //catch or finally
 		if err := recover(); err != nil { //catch
 			fmt.Println("===============================================================")
@@ -170,7 +189,7 @@ func (s *Storage) ReadWithSignedURL(path string, expire time.Duration) (url *url
 	// QuerySignHTTPRead will return two values.
 	// `req` is the generated `*http.Request`, `req.URL` specifies the URL to access with signature in the query string. And `req.Header` specifies the HTTP headers included in the signature.
 	// `err` is the error during this operation.
-	req, err := s.store.QuerySignHTTPRead(path, expire)
+	req, err := s.store.QuerySignHTTPRead(path, expire, pairs...)
 	if err != nil {
 		return nil, fmt.Errorf("read %v: %v", path, err)
 	}
@@ -180,7 +199,7 @@ func (s *Storage) ReadWithSignedURL(path string, expire time.Duration) (url *url
 
 //-----------------------------------------------------------------------------
 
-func (s *Storage) WriteWithSignedURL(path string, expire time.Duration, size int64) (url *url.URL, err error) {
+func (s *Storage) WriteWithSignedURL(path string, expire time.Duration, size int64, pairs ...types.Pair) (url *url.URL, err error) {
 	defer func() { //catch or finally
 		if err := recover(); err != nil { //catch
 			fmt.Println("===============================================================")
@@ -205,7 +224,7 @@ func (s *Storage) WriteWithSignedURL(path string, expire time.Duration, size int
 	// `req.ContentLength` records the length of the associated content, the value equals to `size`.
 	//
 	// `err` is the error during this operation.
-	req, err := s.store.QuerySignHTTPWrite(path, size, expire)
+	req, err := s.store.QuerySignHTTPWrite(path, size, expire, pairs...)
 	if err != nil {
 		return nil, fmt.Errorf("write %v: %v", path, err)
 	}
