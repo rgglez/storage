@@ -27,4 +27,4 @@ cnn := "oss://bucket/?credential=env&endpoint=http://127.0.0.1:9090&name=bucket"
 
 Apache-2.0. Please read the [LICENSE](LICENSE) file.
 
-Copyright (c) 2024 Rodolfo González González.
+Copyright (c) 2026 Rodolfo González González.
