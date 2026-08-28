@@ -4,7 +4,6 @@
 ![GitHub all releases](https://img.shields.io/github/downloads/rgglez/storage/total)
 ![GitHub issues](https://img.shields.io/github/issues/rgglez/storage)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/y/rgglez/storage)
-[![Go Report Card](https://goreportcard.com/badge/github.com/rgglez/storage)](https://goreportcard.com/report/github.com/rgglez/storage)
 [![GitHub release](https://img.shields.io/github/release/rgglez/storage.svg)](https://github.com/rgglez/storage/releases/)
 ![GitHub stars](https://img.shields.io/github/stars/rgglez/storage?style=social)
 ![GitHub forks](https://img.shields.io/github/forks/rgglez/storage?style=social)
